@@ -120,12 +120,31 @@ class WeatherController extends Controller
 
         $results = $response->json('results', []);
 
-        $matchedLocation = collect($results)->first(function ($result) use ($country) {
-            return strtoupper($result['country_code'] ?? '') === $country;
+        $cityLower = strtolower($city);
+        $matchedLocation = collect($results)->first(function ($result) use ($cityLower, $country) {
+            $resultCountry = strtoupper($result['country_code'] ?? '');
+            $resultName = strtolower($result['name'] ?? '');
+            
+            return $resultCountry === $country && (
+                $resultName === $cityLower ||
+                str_contains($resultName, $cityLower) ||
+                str_contains($cityLower, $resultName)
+            );
         });
 
         if (! $matchedLocation || ! isset($matchedLocation['latitude'], $matchedLocation['longitude'])) {
-            throw new \Exception("Location '{$city}, {$country}' does not exist.");
+            if (empty($results)) {
+                throw new \Exception("Location '{$city}, {$country}' does not exist.");
+            }
+
+            $suggestions = collect($results)
+                ->pluck('country_code')
+                ->unique()
+                ->map(fn ($code) => strtoupper($code))
+                ->take(5)
+                ->implode(', ');
+
+            throw new \Exception("Location '{$city}, {$country}' does not exist. Did you mean: {$suggestions}?");
         }
 
         return [
