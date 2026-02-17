@@ -58,7 +58,7 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 
 1. Clone the repository:
    ```
-   git clone https://github.com/collins-droid/laravel-weather-app.git
+   git clone https://github.com/ixynrs/laravel-weather-app.git
    cd laravel-weather-app
    ```
 
