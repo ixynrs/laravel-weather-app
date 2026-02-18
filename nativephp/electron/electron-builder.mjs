@@ -83,6 +83,9 @@ export default {
     afterSign: 'build/notarize.js',
     win: {
         executableName: fileName,
+        target: [
+            { target: 'portable', arch: ['x64'] }
+        ],
         ...(azurePublisherName && azureEndpoint && azureCertificateProfileName && azureCodeSigningAccountName ? {
             azureSignOptions: {
                 publisherName: azurePublisherName,
@@ -92,11 +95,8 @@ export default {
             }
         } : {}),
     },
-    nsis: {
-        artifactName: appName + '-${version}-setup.${ext}',
-        shortcutName: '${productName}',
-        uninstallDisplayName: '${productName}',
-        createDesktopShortcut: 'always',
+    portable: {
+        artifactName: appName + '-${version}-portable.${ext}',
     },
     protocols: {
         name: deepLinkProtocol,
