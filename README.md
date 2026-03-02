@@ -13,7 +13,7 @@ This Laravel-based weather application allows users to fetch current weather dat
 
 ## Features
 
-- Current weather display
+- Current weather displays
 - 5-day weather forecast
 - Search history tracking
 - Caching to reduce API calls
